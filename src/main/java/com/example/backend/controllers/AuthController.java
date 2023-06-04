@@ -1,7 +1,7 @@
 package com.example.backend.controllers;
 
 import com.example.backend.dto.LoginRequestBody;
-import com.example.backend.models.User;
+import com.example.backend.dto.RegisterRequestBody;
 import com.example.backend.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,11 +31,11 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody User user) {
-        if(usersService.findById(user.getId()).isPresent()) {
+    public ResponseEntity<String> register(@RequestBody RegisterRequestBody registerRequestBody) {
+        if(usersService.findByEmail(registerRequestBody.getEmail()).isPresent()) {
             return new ResponseEntity<>("User already exists", HttpStatus.OK);
         } else {
-            usersService.saveUser(user);
+            usersService.saveUser(registerRequestBody);
             return new ResponseEntity<>("Registered", HttpStatus.CREATED);
         }
     }

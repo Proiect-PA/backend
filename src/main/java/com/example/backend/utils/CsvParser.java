@@ -1,16 +1,10 @@
 package com.example.backend.utils;
 
-import com.example.backend.models.Album;
-import com.example.backend.models.Artist;
-import com.example.backend.models.Genre;
-import com.example.backend.models.Track;
-import com.example.backend.repositories.*;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Integer.parseInt;
@@ -18,50 +12,11 @@ import static java.lang.Integer.parseInt;
 
 @Service
 public class CsvParser {
-    private final UsersRepository usersRepository;
-    private final AlbumsRepository albumsRepository;
-    private final ArtistsRepository artistsRepository;
-    private final GenresRepository genresRepository;
 
-    private final TracksRepository tracksRepository;
+    private final DataSaving dataSaving;
 
-    public CsvParser(UsersRepository usersRepository, AlbumsRepository albumsRepository, ArtistsRepository artistsRepository, GenresRepository genresRepository, TracksRepository tracksRepository) {
-        this.usersRepository = usersRepository;
-        this.albumsRepository = albumsRepository;
-        this.artistsRepository = artistsRepository;
-        this.genresRepository = genresRepository;
-        this.tracksRepository = tracksRepository;
-    }
-
-    public void addTrackInDB(String[] trackData) {
-        Artist artist = new Artist(trackData[3]);
-        try {
-            artistsRepository.save(artist);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
-        List<Genre> genres = new ArrayList<>();
-        genres.add(new Genre(trackData[4]));
-        try {
-            genresRepository.saveAll(genres);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
-        Album album = new Album(parseInt(trackData[2]), trackData[1], artist, genres);
-        try {
-            albumsRepository.save(album);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
-        Track track = new Track(trackData[0], album);
-        try {
-            tracksRepository.save(track);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+    public CsvParser(DataSaving dataSaving) {
+        this.dataSaving = dataSaving;
     }
 
     public void parseTracks(String fileContent) throws IOException, CsvException {
@@ -73,15 +28,25 @@ public class CsvParser {
 
         try (CSVReader reader = new CSVReader(new FileReader(file))) {
             List<String[]> res = reader.readAll();
-            int lineCount = 0;
-            for (String[] trackData : res) {
-                if (lineCount == 0) {
-                    lineCount++;
-                    continue;
-                }
-                addTrackInDB(trackData);
-            }
+
+            int part = res.size() / 4;
+            List<String[]> res1 = res.subList(0, part);
+            List<String[]> res2 = res.subList(part, 2 * part);
+            List<String[]> res3 = res.subList(2 * part, 3 * part);
+            List<String[]> res4 = res.subList(3 * part, res.size());
+
+            Thread th1 = new Thread(() -> dataSaving.saveTracks(res1));
+            Thread th2 = new Thread(() -> dataSaving.saveTracks(res2));
+            Thread th3 = new Thread(() -> dataSaving.saveTracks(res3));
+            Thread th4 = new Thread(() -> dataSaving.saveTracks(res4));
+
+            th1.start();
+            th2.start();
+            th3.start();
+            th4.start();
+
         }
     }
+
 
 }

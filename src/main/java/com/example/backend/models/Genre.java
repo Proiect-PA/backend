@@ -2,12 +2,14 @@ package com.example.backend.models;
 
 import jakarta.persistence.*;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "genres")
-public class Genre {
+public class Genre implements MusicEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private UUID id;
 
     @Column(unique=true)
     private String name;
@@ -20,11 +22,11 @@ public class Genre {
         this.name = name;
     }
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

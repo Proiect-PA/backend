@@ -1,15 +1,17 @@
 package com.example.backend.models;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Cascade;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "albums")
-public class Album {
+public class Album implements MusicEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private UUID id;
     private int releaseYear;
     @Column(unique=true)
     private String title;
@@ -35,7 +37,7 @@ public class Album {
         this.genres = genres;
     }
 
-    public Album(int id, int releaseYear, String title, Artist artist, List<Genre> genres) {
+    public Album(UUID id, int releaseYear, String title, Artist artist, List<Genre> genres) {
         this.id = id;
         this.releaseYear = releaseYear;
         this.title = title;
@@ -43,11 +45,11 @@ public class Album {
         this.genres = genres;
     }
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

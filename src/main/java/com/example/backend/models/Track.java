@@ -6,11 +6,12 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "tracks")
-public class Track {
+public class Track implements MusicEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(unique=true)
     private String name;
 
     @ManyToOne

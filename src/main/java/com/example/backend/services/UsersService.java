@@ -1,22 +1,31 @@
 package com.example.backend.services;
 
+import com.example.backend.dto.RegisterRequestBody;
 import com.example.backend.dto.UsernameIdBody;
 import com.example.backend.models.User;
+import com.example.backend.repositories.AlbumsRepository;
+import com.example.backend.repositories.ArtistsRepository;
+import com.example.backend.repositories.TracksRepository;
 import com.example.backend.repositories.UsersRepository;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
-public class UsersService {
+public class UsersService extends MusicInfoForUserService {
+
     private final UsersRepository usersRepository;
-    public User saveUser(User user) {
+
+    public UsersService(UsersRepository usersRepository, AlbumsRepository albumsRepository, ArtistsRepository artistsRepository, TracksRepository tracksRepository, UsersRepository usersRepository1) {
+        super(usersRepository, albumsRepository, artistsRepository, tracksRepository);
+        this.usersRepository = usersRepository1;
+    }
+
+    public void saveUser(RegisterRequestBody registerRequestBody) {
+        User user = new User(registerRequestBody);
         usersRepository.save(user);
-        return user;
     }
 
     public Optional<User> findByEmail(String email) {
@@ -31,6 +40,7 @@ public class UsersService {
         return usersRepository.findById(id);
     }
 
+
     @Transactional
     public void changeUsernameById(UsernameIdBody usernameIdBody) {
         Optional<User> userToChange = findById(usernameIdBody.getId());
@@ -38,4 +48,5 @@ public class UsersService {
             usersRepository.updateUsername(usernameIdBody.getId(), usernameIdBody.getUsername());
         }
     }
+
 }

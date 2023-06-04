@@ -6,12 +6,11 @@ import com.example.backend.models.Track;
 import com.example.backend.services.MusicService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/music")
@@ -25,19 +24,35 @@ public class MusicController {
     }
 
     @GetMapping("/albums/all")
-    public ResponseEntity<List<Album>> getAllAlbums() {
+    public ResponseEntity<Set<Album>> getAllAlbums() {
         return new ResponseEntity<>(musicService.getAllAlbums(), HttpStatus.OK);
     }
 
     @GetMapping("/artists/all")
-    public ResponseEntity<List<Artist>> getAllArtists() {
+    public ResponseEntity<Set<Artist>> getAllArtists() {
         return new ResponseEntity<>(musicService.getAllArtists(), HttpStatus.OK);
     }
 
     @GetMapping("/tracks/all")
-    public ResponseEntity<List<Track>> getAllTracks() {
+    public ResponseEntity<Set<Track>> getAllTracks() {
         return new ResponseEntity<>(musicService.getAllTracks(), HttpStatus.OK);
     }
 
 
+    @GetMapping("/user/{id}/tracks")
+    public ResponseEntity<Set<Track>> getFavouriteTracksByUserId(@PathVariable UUID id) {
+        Set<Track> tracks = musicService.getFavouriteTracksByUserId(id);
+        tracks.forEach(System.out::println);
+        return new ResponseEntity<>(musicService.getFavouriteTracksByUserId(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{id}/artists")
+    public ResponseEntity<Set<Artist>> getFavouriteArtistsByUserId(@PathVariable UUID id) {
+        return new ResponseEntity<>(musicService.getFavouriteArtistsByUserId(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{id}/albums")
+    public ResponseEntity<Set<Album>> getFavouriteAlbumsByUserId(@PathVariable UUID id) {
+        return new ResponseEntity<>(musicService.getFavouriteAlbumsByUserId(id), HttpStatus.OK);
+    }
 }
