@@ -12,6 +12,7 @@ import java.util.UUID;
 
 @Repository
 public interface TracksRepository extends JpaRepository<Track, UUID> {
+    @Query("select a from Track a where lower(a.name) = lower(?1)")
     Optional<Track> findByName(String name);
 
     @Query("select t from Track t where t.album.id = ?1")
@@ -19,4 +20,8 @@ public interface TracksRepository extends JpaRepository<Track, UUID> {
 
     @Query("select t from Track t where t.album.artist.id = ?1")
     Optional<List<Track>> findByArtistId(UUID artistId);
+
+
+    @Query("select count(t) from Track t")
+    int countAll();
 }

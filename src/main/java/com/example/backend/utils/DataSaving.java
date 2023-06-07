@@ -37,13 +37,12 @@ public class DataSaving {
     }
 
     @Transactional
-    public void saveGenres(List<Genre> genres) {
-        for (Genre genre : genres) {
-            genre.setName(genre.getName().trim());
-            if (genresRepository.findByName(genre.getName()).isEmpty()) {
-                genresRepository.saveAndFlush(genre);
-            }
+    public void saveGenres(Genre genre) {
+        genre.setName(genre.getName().trim());
+        if (genresRepository.findByName(genre.getName()).isEmpty()) {
+            genresRepository.saveAndFlush(genre);
         }
+
     }
 
     @Transactional
@@ -65,14 +64,13 @@ public class DataSaving {
             Artist artist = new Artist(trackData[3]);
             saveArtist(artist);
 
-            List<Genre> genres = new ArrayList<>();
-            genres.add(new Genre(trackData[4]));
-            saveGenres(genres);
+            Genre genre = new Genre(trackData[4]);
+            saveGenres(genre);
 
-            List<Genre> newGenres = List.of(genresRepository.findByName(trackData[4]).get());
+            Genre newGenre = genresRepository.findByName(trackData[4]).get();
             Artist newArtist = artistsRepository.findByName(trackData[3]).get();
 
-            Album album = new Album(parseInt(trackData[2]), trackData[1], newArtist, newGenres);
+            Album album = new Album(parseInt(trackData[2]), trackData[1], newArtist, newGenre);
             saveAlbum(album);
 
             Album newAlbum = albumsRepository.findByTitle(trackData[1]).get();

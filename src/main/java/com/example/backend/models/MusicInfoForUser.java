@@ -3,10 +3,7 @@ package com.example.backend.models;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @MappedSuperclass
 @Data
@@ -18,45 +15,45 @@ public class MusicInfoForUser {
     @JoinTable(name = "favourite_tracks",
     joinColumns = @JoinColumn(name = "track_id"),
     inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<Track> favouriteTracks;
+    private Set<Track> favouriteTracks;
 
     @ManyToMany
     @JoinTable(name = "favourite_albums",
     joinColumns = @JoinColumn(name = "album_id"),
     inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<Album> favouriteAlbums;
+    private Set<Album> favouriteAlbums;
 
     @ManyToMany
     @JoinTable(name = "favourite_artists",
     joinColumns = @JoinColumn(name = "artist_id"),
     inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<Artist> favouriteArtists;
+    private Set<Artist> favouriteArtists;
 
     @ManyToMany
     @JoinTable(name = "last_played_tracks",
     joinColumns = @JoinColumn(name = "track_id"),
     inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<Track> lastPlayedTracks;
+    private Set<Track> lastPlayedTracks;
 
     @ManyToMany
     @JoinTable(name = "last_played_albums",
     joinColumns = @JoinColumn(name = "album_id"),
     inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<Album> lastPlayedAlbums;
+    private Set<Album> lastPlayedAlbums;
 
     @ManyToMany
     @JoinTable(name = "last_played_artists",
     joinColumns = @JoinColumn(name = "artist_id"),
     inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<Artist> lastPlayedArtists;
+    private Set<Artist> lastPlayedArtists;
 
     public MusicInfoForUser() {
-        favouriteAlbums = new ArrayList<>(100);
-        favouriteArtists = new ArrayList<>(100);
-        favouriteTracks = new ArrayList<>(100);
-        lastPlayedAlbums = new ArrayList<>(100);
-        lastPlayedArtists = new ArrayList<>(100);
-        lastPlayedTracks = new ArrayList<>(100);
+        favouriteAlbums = new HashSet<>(100);
+        favouriteArtists = new HashSet<>(100);
+        favouriteTracks = new HashSet<>(100);
+        lastPlayedAlbums = new HashSet<>(100);
+        lastPlayedArtists = new HashSet<>(100);
+        lastPlayedTracks = new HashSet<>(100);
         frequencies = new HashMap<>(200);
     }
 

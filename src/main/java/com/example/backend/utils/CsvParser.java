@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.util.List;
 
-import static java.lang.Integer.parseInt;
-
 
 @Service
 public class CsvParser {

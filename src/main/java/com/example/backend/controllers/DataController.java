@@ -20,8 +20,12 @@ public class DataController {
     }
 
     @PostMapping(value="/csv/tracks")
-    public ResponseEntity<Void> postAlbums(@RequestBody String fileContent) throws IOException, CsvException {
-        csvParser.parseTracks(fileContent);
+    public ResponseEntity<Void> postTracks(@RequestBody String fileContent) {
+        try {
+            csvParser.parseTracks(fileContent);
+        } catch (IOException | CsvException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

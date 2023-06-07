@@ -2,11 +2,9 @@ package com.example.backend.services;
 
 import com.example.backend.dto.RegisterRequestBody;
 import com.example.backend.dto.UsernameIdBody;
+import com.example.backend.exceptions.NonexistentUser;
 import com.example.backend.models.User;
-import com.example.backend.repositories.AlbumsRepository;
-import com.example.backend.repositories.ArtistsRepository;
-import com.example.backend.repositories.TracksRepository;
-import com.example.backend.repositories.UsersRepository;
+import com.example.backend.repositories.*;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -14,13 +12,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class UsersService extends MusicInfoForUserService {
+public class UsersService {
 
     private final UsersRepository usersRepository;
 
-    public UsersService(UsersRepository usersRepository, AlbumsRepository albumsRepository, ArtistsRepository artistsRepository, TracksRepository tracksRepository, UsersRepository usersRepository1) {
-        super(usersRepository, albumsRepository, artistsRepository, tracksRepository);
-        this.usersRepository = usersRepository1;
+    public UsersService(UsersRepository usersRepository) {
+        this.usersRepository = usersRepository;
     }
 
     public void saveUser(RegisterRequestBody registerRequestBody) {
@@ -28,25 +25,26 @@ public class UsersService extends MusicInfoForUserService {
         usersRepository.save(user);
     }
 
-    public Optional<User> findByEmail(String email) {
-        return usersRepository.findByEmail(email);
-    }
-
-    public Optional<User> findByUsername(String username) {
-        return usersRepository.findByUsername(username);
-    }
-
-    public Optional<User> findById(UUID id) {
-        return usersRepository.findById(id);
-    }
-
-
-    @Transactional
-    public void changeUsernameById(UsernameIdBody usernameIdBody) {
-        Optional<User> userToChange = findById(usernameIdBody.getId());
-        if(userToChange.isPresent()) {
-            usersRepository.updateUsername(usernameIdBody.getId(), usernameIdBody.getUsername());
+    public User findByEmail(String email) throws NonexistentUser {
+        Optional<User> user = usersRepository.findByEmail(email);
+        if(user.isPresent()) {
+            return user.get();
+        } else {
+            throw new NonexistentUser();
         }
     }
 
+    public User findById(UUID id) throws NonexistentUser {
+        Optional<User> user = usersRepository.findById(id);
+        if(user.isPresent()) {
+            return user.get();
+        } else {
+            throw new NonexistentUser();
+        }
+    }
+
+    @Transactional
+    public void changeUsernameById(UsernameIdBody usernameIdBody) {
+        usersRepository.updateUsername(usernameIdBody.getId(), usernameIdBody.getUsername());
+    }
 }

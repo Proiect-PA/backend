@@ -1,9 +1,6 @@
 package com.example.backend.models;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.Cascade;
-
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -20,29 +17,27 @@ public class Album implements MusicEntity {
     @JoinColumn(name = "artist_id")
     private Artist artist;
 
-    @ManyToMany
-    @JoinTable(name = "album_genres",
-            joinColumns = @JoinColumn(name = "album_id"),
-            inverseJoinColumns = @JoinColumn(name = "genre_id"))
-    private List<Genre> genres;
+    @ManyToOne
+    @JoinColumn(name = "genre_id")
+    private Genre genre;
 
     public Album() {
 
     }
 
-    public Album(int releaseYear, String title, Artist artist, List<Genre> genres) {
+    public Album(int releaseYear, String title, Artist artist, Genre genre) {
         this.releaseYear = releaseYear;
         this.title = title;
         this.artist = artist;
-        this.genres = genres;
+        this.genre = genre;
     }
 
-    public Album(UUID id, int releaseYear, String title, Artist artist, List<Genre> genres) {
+    public Album(UUID id, int releaseYear, String title, Artist artist, Genre genre) {
         this.id = id;
         this.releaseYear = releaseYear;
         this.title = title;
         this.artist = artist;
-        this.genres = genres;
+        this.genre = genre;
     }
 
     public UUID getId() {
@@ -53,12 +48,12 @@ public class Album implements MusicEntity {
         this.id = id;
     }
 
-    public List<Genre> getGenres() {
-        return genres;
+    public Genre getGenre() {
+        return genre;
     }
 
-    public void setGenres(List<Genre> genres) {
-        this.genres = genres;
+    public void setGenre(Genre genre) {
+        this.genre = genre;
     }
 
     public int getReleaseYear() {
@@ -85,9 +80,6 @@ public class Album implements MusicEntity {
         this.title = title;
     }
 
-    public void addGenre(Genre genre) {
-        this.genres.add(genre);
-    }
 
     @Override
     public boolean equals(Object obj) {
@@ -105,7 +97,7 @@ public class Album implements MusicEntity {
                 "releaseYear=" + releaseYear +
                 ", title='" + title + '\'' +
                 ", artist=" + artist +
-                ", genres=" + genres +
+                ", genre=" + genre +
                 '}';
     }
 }
