@@ -22,6 +22,14 @@ Structura modelelor (care sunt asociate cu un Entity din baza de date pe baza OR
 
 ![image](https://github.com/Proiect-PA/backend/assets/83142073/5075c90c-216b-443f-bcb8-769d10a61fae)
 ![image](https://github.com/Proiect-PA/backend/assets/83142073/12c7a729-1efe-4ac8-aaa6-185fecac9069)
-
 ![image](https://github.com/Proiect-PA/backend/assets/83142073/6d074454-0fd6-433b-aa5d-0d4e3b4028b5)
+
+
+
+**API-ul**
+
+![image](https://github.com/Proiect-PA/backend/assets/83142073/4491a52a-8c31-4a55-9111-2866fa72c865)
+![image](https://github.com/Proiect-PA/backend/assets/83142073/a51620d3-6a36-4705-b620-29ee3150c53d)
+![image](https://github.com/Proiect-PA/backend/assets/83142073/147984b6-6be1-4b48-a5ae-588f822e0e03)
+
 
