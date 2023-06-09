@@ -24,7 +24,7 @@ public class AuthController {
     public ResponseEntity<String> login(@RequestBody LoginRequestBody loginDetails) {
         try {
             authService.login(loginDetails);
-            return new ResponseEntity<>("Logged in", HttpStatus.OK);
+            return new ResponseEntity<>(loginDetails.getEmail(), HttpStatus.OK);
         } catch (NonexistentUser e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -34,7 +34,7 @@ public class AuthController {
     public ResponseEntity<String> register(@RequestBody RegisterRequestBody registerRequestBody) {
         try {
             authService.register(registerRequestBody);
-            return new ResponseEntity<>("Registered", HttpStatus.OK);
+            return new ResponseEntity<>(registerRequestBody.getEmail(), HttpStatus.OK);
         } catch (AlreadyExistentUser e) {
             return new ResponseEntity<>("User already exists", HttpStatus.OK);
         }

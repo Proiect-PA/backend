@@ -19,4 +19,7 @@ public interface AlbumsRepository extends JpaRepository<Album, UUID> {
 
     @Query("SELECT a FROM Album a WHERE a.genre.id = ?1")
     Optional<List<Album>> findByGenreId(UUID genreId);
+
+    @Query("SELECT a FROM Album a WHERE a.artist.id = ?1")
+    Optional<List<Album>> getAlbumByArtistId(UUID id);
 }

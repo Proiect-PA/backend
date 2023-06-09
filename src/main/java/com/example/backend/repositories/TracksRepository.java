@@ -24,4 +24,7 @@ public interface TracksRepository extends JpaRepository<Track, UUID> {
 
     @Query("select count(t) from Track t")
     int countAll();
+
+    @Query("select t from Track t where t.album.id = ?1")
+    Optional<List<Track>> getTrackByAlbumId(UUID albumId);
 }

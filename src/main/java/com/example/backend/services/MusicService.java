@@ -2,6 +2,8 @@ package com.example.backend.services;
 
 import com.example.backend.dto.MusicEntityTransferBody;
 import com.example.backend.dto.SearchFilter;
+import com.example.backend.exceptions.NonexistentAlbum;
+import com.example.backend.exceptions.NonexistentArtist;
 import com.example.backend.exceptions.NonexistentUser;
 import com.example.backend.models.*;
 import com.example.backend.repositories.AlbumsRepository;
@@ -10,6 +12,7 @@ import com.example.backend.repositories.TracksRepository;
 import com.example.backend.repositories.UsersRepository;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.*;
 
 @Service
@@ -132,5 +135,24 @@ public class MusicService {
         }
 
         return playlist;
+    }
+
+
+    public Set<Track> getTrackByAlbumId(UUID id) throws NonexistentAlbum {
+        Optional<List<Track>> tracks = tracksRepository.getTrackByAlbumId(id);
+       if(tracks.isPresent()) {
+           return new HashSet<>(tracks.get());
+       } else {
+           throw new NonexistentAlbum();
+       }
+    }
+
+    public Set<Album> getAlbumByArtistId(UUID id) throws NonexistentArtist {
+        Optional<List<Album>> albums = albumsRepository.getAlbumByArtistId(id);
+        if(albums.isPresent()) {
+            return new HashSet<>(albums.get());
+        } else {
+            throw new NonexistentArtist();
+        }
     }
 }

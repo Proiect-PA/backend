@@ -2,6 +2,8 @@ package com.example.backend.controllers;
 
 import com.example.backend.dto.MusicEntityTransferBody;
 import com.example.backend.dto.SearchFilter;
+import com.example.backend.exceptions.NonexistentAlbum;
+import com.example.backend.exceptions.NonexistentArtist;
 import com.example.backend.exceptions.NonexistentUser;
 import com.example.backend.models.Album;
 import com.example.backend.models.Artist;
@@ -89,5 +91,23 @@ public class MusicController {
     @GetMapping("/random-playlist")
     public ResponseEntity<Set<Track>> getRandomPlaylist() {
         return new ResponseEntity<>(musicService.getRandomPlaylist(), HttpStatus.OK);
+    }
+
+    @GetMapping("/album/{id}/tracks")
+    public ResponseEntity<Set<Track>> getTracksByAlbumId(@PathVariable UUID id) {
+        try {
+            return new ResponseEntity<>(musicService.getTrackByAlbumId(id), HttpStatus.OK);
+        } catch (NonexistentAlbum e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/artist/{id}/albums")
+    public ResponseEntity<Set<Album>> getAlbumsByArtistId(@PathVariable UUID id) {
+        try {
+            return new ResponseEntity<>(musicService.getAlbumByArtistId(id), HttpStatus.OK);
+        } catch (NonexistentArtist e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }
